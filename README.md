@@ -11,7 +11,7 @@ This is a microservice infrastructure project run with Ocelot and .NET WebAPI.
     - [kernel](./app/kernel)
     - [utils](./app/utils)
 
-## .NET 專案建立
+## .NET 專案建立與發佈
 
 參考 [.NET Core CLI & Container integrate](https://github.com/eastmoon/infra-dotnet-webapi/blob/master/doc/dotnet-cli.md) 建立專案，後續範例以 Auth 專案為範本，其他項目參考過程修改相關服務名稱 ```AuthServer``` 為對應名稱。
 
@@ -21,11 +21,11 @@ This is a microservice infrastructure project run with Ocelot and .NET WebAPI.
 cd /app/auth
 dotnet new sln
 dotnet new gitignore
-curl -o .gitattribures https://gitattributes.io/api/visualstudio
 dotnet new webapi --no-restore -o AuthService
-dotnet new classlib --no-restore -f net6.0 -o AuthService.Core
 dotnet sln add $(ls -r **/*.csproj)
 ```
+
++ 依據專案功能調整服務運作方式
 
 + 發佈專案
 
