@@ -1,25 +1,28 @@
+// Learn more about configuring Ocelot/OpenAPI at https://ocelot.readthedocs.io/
+// ref : "API Gateway Ocelot .Net Core 6.1 Setup" at https://stackoverflow.com/questions/71264496
+
+// Import library
+using Ocelot.DependencyInjection;
+using Ocelot.Middleware;
+
+// Creaate application builder
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Declare ocelot configuration by setting json file.
+IConfiguration configuration = new ConfigurationBuilder()
+                            .AddJsonFile("ocelot.json")
+                            .Build();
+// Setting ocelot service with configuration variable.
+builder.Services.AddOcelot(configuration);
 
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
+// Build and setting application
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+// Sets up all the Ocelot middleware
+await app.UseOcelot();
 
-app.UseHttpsRedirection();
+// Sets up application routing
+app.MapGet("/", () => "Hello World!");
 
-app.UseAuthorization();
-
-app.MapControllers();
-
+// Startup application
 app.Run();
