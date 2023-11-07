@@ -43,9 +43,9 @@ Ocelot 專案是一個 .NET Core 專案，並增加 Ocelot 套件
 cd /app/ocelot
 dotnet new sln
 dotnet new gitignore
-dotnet new webapi --no-restore -o OcelotService
+dotnet new webapi --no-restore -o Service
 dotnet sln add $(ls -r **/*.csproj)
-cd /app/ocelot/OcelotService
+cd /app/ocelot/Service
 dotnet add package ocelot --version 18.0.0
 ```
 
@@ -56,6 +56,14 @@ Ocelot 版本對應 .NET 版本可參考 [Ocelot Nuget 官方網站](https://www
 + Ocelot 17 為 .NET 5
 + Ocelot 14 - 16 為 .NET 3.1
 + Ocelot 13.8 - 13.9 為 .NET 3.0
+
+建置專案使用標準的程序
+
+```
+cd /app/ocelot
+rm -rf publish/*
+dotnet publish --configuration Release -o publish
+```
 
 ## 文獻
 

@@ -1,4 +1,4 @@
-namespace OcelotService;
+namespace Service;
 
 public class WeatherForecast
 {
