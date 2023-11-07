@@ -4,16 +4,16 @@
 set -e
 
 if [ "$1" = "dotnet" ]; then
-    if [ "$2" == "publish"]; then
+    if [ "$2" = "publish" ]; then
         cd /app
         rm -rf publish/*
-        dotnet publish --configuration Release -o publish >&3
+        dotnet publish --configuration Release -o publish
     fi
     if [ -e /app/publish/Service.dll ];
     then
-        dotnet /app/publish/Service.dll >&3
+        dotnet /app/publish/Service.dll
     else
-        echo >&3 "$0: project not publish."
+        echo "$0: project not publish."
         tail -f /dev/null
     fi
 fi

@@ -15,4 +15,4 @@ EXPOSE 5000/tcp
 EXPOSE 5001/tcp
 WORKDIR /app
 ENTRYPOINT ["/docker-entrypoint.sh"]
-CMD ["dotnet", "build"]
+CMD ["dotnet", "publish"]
