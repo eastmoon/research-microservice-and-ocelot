@@ -47,6 +47,7 @@ for %%a in ("%cd%") do (
     set PROJECT_NAME=%%~na
 )
 set PROJECT_ENV=
+set CONF_FILE_PATH=%CLI_DIRECTORY%\conf\docker\.env
 
 @rem ------------------- execute script -------------------
 
@@ -136,27 +137,99 @@ goto end
 
 @rem ------------------- Common Command method -------------------
 
+:cli-docker-build
+    set DOCKER_CONF_NAME=%1
+    set DOCKER_IMAGE_NAME=%2
+    @rem Create docker commit lock cache directory
+    set TARGET_DIR=%CLI_DIRECTORY%\cache\docker
+    IF NOT EXIST %TARGET_DIR% ( mkdir %TARGET_DIR% )
+
+    @rem Setting git information
+    set CONF_DOCKER_ROOT_DIR=%CLI_DIRECTORY%conf\docker
+    set CONF_DOCKER_DIR=%CONF_DOCKER_ROOT_DIR%
+    set CONF_DOCKER_FILENAME=Dockerfile
+    if EXIST %CONF_DOCKER_ROOT_DIR%\%DOCKER_CONF_NAME% (
+        set CONF_DOCKER_DIR=%CONF_DOCKER_ROOT_DIR%\%DOCKER_CONF_NAME%
+    )
+    if EXIST %CONF_DOCKER_ROOT_DIR%\%CONF_DOCKER_FILENAME%.%DOCKER_CONF_NAME% (
+        set CONF_DOCKER_FILENAME=%CONF_DOCKER_FILENAME%.%DOCKER_CONF_NAME%
+    )
+    set GIT_COMMIT_LOCK_FILE=%TARGET_DIR%\%DOCKER_CONF_NAME%
+    set GIT_COMMIT_CODE=git rev-list --max-count=1 HEAD -- %CONF_DOCKER_DIR%\%CONF_DOCKER_FILENAME%
+
+    @rem Retrieve current commit code
+    for /f %%i in ('%GIT_COMMIT_CODE%') do set CUR_CODE=%%i
+
+    @rem Retrieve lock commit code in cache
+    if EXIST %GIT_COMMIT_LOCK_FILE% ( set /p LOCK_CODE=<%GIT_COMMIT_LOCK_FILE% ) else ( set LOCK_CODE=0 )
+
+    @rem Build image
+    if NOT %CUR_CODE% == %LOCK_CODE% (
+        cd %CONF_DOCKER_DIR%
+        docker build --rm ^
+            -t %DOCKER_IMAGE_NAME% ^
+            -f %CONF_DOCKER_FILENAME% ^
+            .
+        cd %CLI_DIRECTORY%
+        %GIT_COMMIT_CODE% > %GIT_COMMIT_LOCK_FILE%
+
+    )
+
+    goto end
+
+:cli-up-docker-prepare
+    echo ^> Build docker compose environment file
+    @rem Create .env for compose
+    echo Current Environment %PROJECT_ENV%
+    echo PROJECT_NAME=%PROJECT_NAME% > %CONF_FILE_PATH%
+
+    echo ^> Build docker images
+    @rem .NET SDK
+    call :cli-docker-build dotnet.sdk net.dotnet.sdk:%PROJECT_NAME%
+    echo IMAGE_DOTNET=net.dotnet.sdk:%PROJECT_NAME% >> %CONF_FILE_PATH%
+
+    @rem Setting ocelot project and cache directory
+    set TARGET_DIR=%CLI_DIRECTORY%\cache\publish\ocelot
+    IF NOT EXIST %TARGET_DIR% (
+        mkdir %TARGET_DIR%
+    )
+    echo DOTNET_OCELOT_PUBLISH_PATH=%TARGET_DIR% >> %CONF_FILE_PATH%
+    echo DOTNET_OCELOT_APP_PATH=%CLI_DIRECTORY%\app\ocelot >> %CONF_FILE_PATH%
+
+    @rem Setting auth project and cache directory
+    set TARGET_DIR=%CLI_DIRECTORY%\cache\publish\auth
+    IF NOT EXIST %TARGET_DIR% (
+        mkdir %TARGET_DIR%
+    )
+    echo DOTNET_AUTH_PUBLISH_PATH=%TARGET_DIR% >> %CONF_FILE_PATH%
+    echo DOTNET_AUTH_APP_PATH=%CLI_DIRECTORY%\app\auth >> %CONF_FILE_PATH%
+
+    @rem Setting core project and cache directory
+    set TARGET_DIR=%CLI_DIRECTORY%\cache\publish\core
+    IF NOT EXIST %TARGET_DIR% (
+        mkdir %TARGET_DIR%
+    )
+    echo DOTNET_CORE_PUBLISH_PATH=%TARGET_DIR% >> %CONF_FILE_PATH%
+    echo DOTNET_CORE_APP_PATH=%CLI_DIRECTORY%\app\core >> %CONF_FILE_PATH%
+
+    @rem Setting utils project and cache directory
+    set TARGET_DIR=%CLI_DIRECTORY%\cache\publish\utils
+    IF NOT EXIST %TARGET_DIR% (
+        mkdir %TARGET_DIR%
+    )
+    echo DOTNET_UTILS_PUBLISH_PATH=%TARGET_DIR% >> %CONF_FILE_PATH%
+    echo DOTNET_UTILS_APP_PATH=%CLI_DIRECTORY%\app\utils >> %CONF_FILE_PATH%
+    goto end
+
 @rem ------------------- Command "dev" method -------------------
 
 :cli-dev
-    echo ^> Startup and into container for develop algorithm
-    @rem build image
-    set PROJECT_ENV=dotnet.sdk
-    cd ./conf/docker
-    docker build -t net.%PROJECT_NAME%:%PROJECT_ENV% -f Dockerfile.%PROJECT_ENV% .
-    cd %CLI_DIRECTORY%
-
-    @rem create cache
-    IF NOT EXIST cache (
-        mkdir cache
-    )
+    @rem setting container infomation
+    call :cli-up-docker-prepare
 
     @rem execute container
-    docker rm -f net-%PROJECT_NAME%
-    docker run -d --rm ^
-        -v %cd%\app:/app ^
-        --name net-%PROJECT_NAME% ^
-        net.%PROJECT_NAME%:%PROJECT_ENV%
+    echo ^> Startup docker container instance
+    docker-compose -f .\conf\docker\docker-compose.yml --env-file %CONF_FILE_PATH% up -d
 
     @rem into container
     docker exec -ti net-%PROJECT_NAME% bash
@@ -176,19 +249,34 @@ goto end
 @rem ------------------- Command "into" method -------------------
 
 :cli-into
-    @rem into container
-    docker exec -ti asa-%PROJECT_NAME% bash
+    @rem Into docker container by docker exec
+    if defined INTO_CONTAINER (
+        docker exec -ti dotnet-%INTO_CONTAINER%-srv_%PROJECT_NAME% bash
+    ) else (
+        echo choose target container with options.
+    )
     goto end
 
 :cli-into-args
+    set COMMON_ARGS_KEY=%1
+    set COMMON_ARGS_VALUE=%2
+    if "%COMMON_ARGS_KEY%"=="--ocelot" (set INTO_CONTAINER=ocelot)
+    if "%COMMON_ARGS_KEY%"=="--auth" (set INTO_CONTAINER=auth)
+    if "%COMMON_ARGS_KEY%"=="--core" (set INTO_CONTAINER=core)
+    if "%COMMON_ARGS_KEY%"=="--utils" (set INTO_CONTAINER=utils)
     goto end
+
 
 :cli-into-help
     echo This is a Command Line Interface with project %PROJECT_NAME%
-    echo Going to container asa-%PROJECT_NAME%.
+    echo Into docker container by docker exec.
     echo.
     echo Options:
-    echo      --help, -h        Show more information with UP Command.
+    echo      --help, -h        Show more information with CLI.
+    echo      --ocelot          Into ocelot container.
+    echo      --auth            Into auth container.
+    echo      --core            Into jenkin core container.
+    echo      --utils           Into utils container.
     goto end
 
 @rem ------------------- Command "pack" method -------------------

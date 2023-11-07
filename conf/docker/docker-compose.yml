@@ -1,0 +1,49 @@
+# Docker-Compose document
+# Ref : https://docs.docker.com/compose/compose-file/
+
+version: "3"
+services:
+  ocelot:
+    image: ${IMAGE_DOTNET}
+    container_name: dotnet-ocelot-srv_${PROJECT_NAME}
+    ports:
+      - "5000:5000"
+    volumes:
+      - ${DOTNET_OCELOT_APP_PATH}:/app
+      - ${DOTNET_OCELOT_PUBLISH_PATH}:/app/publish
+    networks:
+      - service_network
+  auth:
+    image: ${IMAGE_DOTNET}
+    container_name: dotnet-auth-srv_${PROJECT_NAME}
+    ports:
+      - "5001:5000"
+    volumes:
+      - ${DOTNET_AUTH_APP_PATH}:/app
+      - ${DOTNET_AUTH_PUBLISH_PATH}:/app/publish
+    networks:
+      - service_network
+  core:
+    image: ${IMAGE_DOTNET}
+    container_name: dotnet-core-srv_${PROJECT_NAME}
+    ports:
+      - "5002:5000"
+    volumes:
+      - ${DOTNET_CORE_APP_PATH}:/app
+      - ${DOTNET_CORE_PUBLISH_PATH}:/app/publish
+    networks:
+      - service_network
+  utils:
+    image: ${IMAGE_DOTNET}
+    container_name: dotnet-utils-srv_${PROJECT_NAME}
+    ports:
+      - "5003:5000"
+    volumes:
+      - ${DOTNET_UTILS_APP_PATH}:/app
+      - ${DOTNET_UTILS_PUBLISH_PATH}:/app/publish
+    networks:
+      - service_network
+
+networks:
+  service_network:
+    driver: bridge
