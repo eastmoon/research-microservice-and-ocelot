@@ -1,4 +1,4 @@
-namespace AuthService;
+namespace Service;
 
 public class WeatherForecast
 {

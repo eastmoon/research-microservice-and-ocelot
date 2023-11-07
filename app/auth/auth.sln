@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthService", "AuthService\AuthService.csproj", "{3E5330BF-B67F-4ED3-A12A-09DC3ED8B0EA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service", "Service\Service.csproj", "{E3CA17B8-F6CE-4DE7-B2EE-2292E0AD45D4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -14,9 +14,9 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{3E5330BF-B67F-4ED3-A12A-09DC3ED8B0EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3E5330BF-B67F-4ED3-A12A-09DC3ED8B0EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3E5330BF-B67F-4ED3-A12A-09DC3ED8B0EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3E5330BF-B67F-4ED3-A12A-09DC3ED8B0EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E3CA17B8-F6CE-4DE7-B2EE-2292E0AD45D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3CA17B8-F6CE-4DE7-B2EE-2292E0AD45D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3CA17B8-F6CE-4DE7-B2EE-2292E0AD45D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3CA17B8-F6CE-4DE7-B2EE-2292E0AD45D4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

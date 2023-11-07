@@ -21,7 +21,7 @@ This is a microservice infrastructure project run with Ocelot and .NET WebAPI.
 cd /app/auth
 dotnet new sln
 dotnet new gitignore
-dotnet new webapi --no-restore -o AuthService
+dotnet new webapi --no-restore -o Service
 dotnet sln add $(ls -r **/*.csproj)
 ```
 
