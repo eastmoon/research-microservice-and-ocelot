@@ -125,11 +125,12 @@ goto end
     echo.
     echo Options:
     echo      --help, -h        Show more information with CLI.
-    echo      --rpc             Setting project environment with "RPC", default is "CLI"
     echo.
     echo Command:
     echo      dev               Startup and into container for develop algorithm.
     echo      into              Going to container.
+    echo      logs              Show container log.
+    echo      reload            Restart container.
     echo      pack              Package docker image with algorithm.
     echo.
     echo Run 'cli [COMMAND] --help' for more information on a command.
@@ -230,7 +231,7 @@ goto end
     @rem execute container
     echo ^> Startup docker container instance
     docker-compose -f .\conf\docker\docker-compose.yml --env-file %CONF_FILE_PATH% up -d
-    
+
     goto end
 
 :cli-dev-args
@@ -264,10 +265,74 @@ goto end
     if "%COMMON_ARGS_KEY%"=="--utils" (set INTO_CONTAINER=utils)
     goto end
 
-
 :cli-into-help
     echo This is a Command Line Interface with project %PROJECT_NAME%
     echo Into docker container by docker exec.
+    echo.
+    echo Options:
+    echo      --help, -h        Show more information with CLI.
+    echo      --ocelot          Into ocelot container.
+    echo      --auth            Into auth container.
+    echo      --core            Into jenkin core container.
+    echo      --utils           Into utils container.
+    goto end
+
+@rem ------------------- Command "logs" method -------------------
+
+:cli-logs
+    @rem Show docker container logs
+    if defined INTO_CONTAINER (
+        docker logs -f dotnet-%INTO_CONTAINER%-srv_%PROJECT_NAME%
+    ) else (
+        echo choose target container with options.
+    )
+    goto end
+
+:cli-logs-args
+    set COMMON_ARGS_KEY=%1
+    set COMMON_ARGS_VALUE=%2
+    if "%COMMON_ARGS_KEY%"=="--ocelot" (set INTO_CONTAINER=ocelot)
+    if "%COMMON_ARGS_KEY%"=="--auth" (set INTO_CONTAINER=auth)
+    if "%COMMON_ARGS_KEY%"=="--core" (set INTO_CONTAINER=core)
+    if "%COMMON_ARGS_KEY%"=="--utils" (set INTO_CONTAINER=utils)
+    goto end
+
+:cli-logs-help
+    echo This is a Command Line Interface with project %PROJECT_NAME%
+    echo Show docker container logs.
+    echo.
+    echo Options:
+    echo      --help, -h        Show more information with CLI.
+    echo      --ocelot          Into ocelot container.
+    echo      --auth            Into auth container.
+    echo      --core            Into jenkin core container.
+    echo      --utils           Into utils container.
+    goto end
+
+@rem ------------------- Command "reload" method -------------------
+
+:cli-reload
+    @rem Restart target container and re-publish project and startup
+    if defined INTO_CONTAINER (
+        docker restart dotnet-%INTO_CONTAINER%-srv_%PROJECT_NAME%
+        docker logs -f dotnet-%INTO_CONTAINER%-srv_%PROJECT_NAME% --since "1m"
+    ) else (
+        echo choose target container with options.
+    )
+    goto end
+
+:cli-reload-args
+    set COMMON_ARGS_KEY=%1
+    set COMMON_ARGS_VALUE=%2
+    if "%COMMON_ARGS_KEY%"=="--ocelot" (set INTO_CONTAINER=ocelot)
+    if "%COMMON_ARGS_KEY%"=="--auth" (set INTO_CONTAINER=auth)
+    if "%COMMON_ARGS_KEY%"=="--core" (set INTO_CONTAINER=core)
+    if "%COMMON_ARGS_KEY%"=="--utils" (set INTO_CONTAINER=utils)
+    goto end
+
+:cli-reload-help
+    echo This is a Command Line Interface with project %PROJECT_NAME%
+    echo Restart target container and re-publish project and startup.
     echo.
     echo Options:
     echo      --help, -h        Show more information with CLI.
