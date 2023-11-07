@@ -35,9 +35,32 @@ rm -rf publish/*
 dotnet publish --configuration Release -o publish
 ```
 
+## Ocelot 專案建立
+
+Ocelot 專案是一個 .NET Core 專案，並增加 Ocelot 套件
+
+```
+cd /app/ocelot
+dotnet new sln
+dotnet new gitignore
+dotnet new webapi --no-restore -o OcelotService
+dotnet sln add $(ls -r **/*.csproj)
+cd /app/ocelot/OcelotService
+dotnet add package ocelot --version 18.0.0
+```
+
+Ocelot 版本對應 .NET 版本可參考 [Ocelot Nuget 官方網站](https://www.nuget.org/packages/Ocelot)，其約略對應為：
+
++ Ocelot 19+ 為 .NET 7
++ Ocelot 18 為 .NET 6
++ Ocelot 17 為 .NET 5
++ Ocelot 14 - 16 為 .NET 3.1
++ Ocelot 13.8 - 13.9 為 .NET 3.0
+
 ## 文獻
 
-+ [Ocelot Navigation](https://ocelot.readthedocs.io/en/latest/introduction/gettingstarted.html)
++ [Ocelot - Github](https://github.com/ThreeMammals/Ocelot)
+    - [Ocelot Navigation](https://ocelot.readthedocs.io/en/latest/introduction/gettingstarted.html)
     - [使用 Ocelot 實作 API 閘道](https://learn.microsoft.com/zh-tw/dotnet/architecture/microservices/multi-container-microservice-net-applications/implement-api-gateways-with-ocelot)
 + 教學文章與範例專案
     - [Ocelot-Gateway-Sample - Github](https://github.com/PasinduUmayanga/Ocelot-Gateway-Sample)
