@@ -230,9 +230,7 @@ goto end
     @rem execute container
     echo ^> Startup docker container instance
     docker-compose -f .\conf\docker\docker-compose.yml --env-file %CONF_FILE_PATH% up -d
-
-    @rem into container
-    docker exec -ti net-%PROJECT_NAME% bash
+    
     goto end
 
 :cli-dev-args
