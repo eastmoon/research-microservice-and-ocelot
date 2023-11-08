@@ -185,9 +185,13 @@ goto end
     echo PROJECT_NAME=%PROJECT_NAME% > %CONF_FILE_PATH%
 
     echo ^> Build docker images
-    @rem .NET SDK
-    call :cli-docker-build dotnet.sdk net.dotnet.sdk:%PROJECT_NAME%
-    echo IMAGE_DOTNET=net.dotnet.sdk:%PROJECT_NAME% >> %CONF_FILE_PATH%
+    @rem .NET SDK 6.0
+    call :cli-docker-build dotnet.sdk net.dotnet.6.sdk:%PROJECT_NAME%
+    echo IMAGE_DOTNET_V6=net.dotnet.6.sdk:%PROJECT_NAME% >> %CONF_FILE_PATH%
+
+    @rem .NET SDK 3.1
+    call :cli-docker-build dotnet.sdk net.dotnet.3.sdk:%PROJECT_NAME%
+    echo IMAGE_DOTNET_V3=net.dotnet.3.sdk:%PROJECT_NAME% >> %CONF_FILE_PATH%
 
     @rem Setting ocelot project and cache directory
     set TARGET_DIR=%CLI_DIRECTORY%\cache\publish\ocelot

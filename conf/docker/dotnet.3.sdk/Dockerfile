@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:6.0
+FROM mcr.microsoft.com/dotnet/sdk:3.1
 
 # Install dotnet tools
 RUN dotnet tool install -g swashbuckle.aspnetcore.cli
@@ -16,7 +16,6 @@ ADD ./docker-entrypoint.sh /docker-entrypoint.sh
 
 # Setting Container
 EXPOSE 5000/tcp
-EXPOSE 5001/tcp
 WORKDIR /app
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["dotnet", "publish"]
