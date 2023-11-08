@@ -4,7 +4,7 @@
 version: "3"
 services:
   ocelot:
-    image: ${IMAGE_DOTNET}
+    image: ${IMAGE_DOTNET_V6}
     container_name: dotnet-ocelot-srv_${PROJECT_NAME}
     ports:
       - "5000:5000"
@@ -14,7 +14,7 @@ services:
     networks:
       - service_network
   auth:
-    image: ${IMAGE_DOTNET}
+    image: ${IMAGE_DOTNET_V6}
     container_name: dotnet-auth-srv_${PROJECT_NAME}
     ports:
       - "5001:5000"
@@ -24,7 +24,7 @@ services:
     networks:
       - service_network
   core:
-    image: ${IMAGE_DOTNET}
+    image: ${IMAGE_DOTNET_V6}
     container_name: dotnet-core-srv_${PROJECT_NAME}
     ports:
       - "5002:5000"
@@ -34,7 +34,7 @@ services:
     networks:
       - service_network
   utils:
-    image: ${IMAGE_DOTNET}
+    image: ${IMAGE_DOTNET_V6}
     container_name: dotnet-utils-srv_${PROJECT_NAME}
     ports:
       - "5003:5000"
