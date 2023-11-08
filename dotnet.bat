@@ -186,11 +186,11 @@ goto end
 
     echo ^> Build docker images
     @rem .NET SDK 6.0
-    call :cli-docker-build dotnet.sdk net.dotnet.6.sdk:%PROJECT_NAME%
+    call :cli-docker-build dotnet.6.sdk net.dotnet.6.sdk:%PROJECT_NAME%
     echo IMAGE_DOTNET_V6=net.dotnet.6.sdk:%PROJECT_NAME% >> %CONF_FILE_PATH%
 
     @rem .NET SDK 3.1
-    call :cli-docker-build dotnet.sdk net.dotnet.3.sdk:%PROJECT_NAME%
+    call :cli-docker-build dotnet.3.sdk net.dotnet.3.sdk:%PROJECT_NAME%
     echo IMAGE_DOTNET_V3=net.dotnet.3.sdk:%PROJECT_NAME% >> %CONF_FILE_PATH%
 
     @rem Setting ocelot project and cache directory
