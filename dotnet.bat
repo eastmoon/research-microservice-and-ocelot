@@ -315,7 +315,7 @@ goto end
     @rem Restart target container and re-publish project and startup
     if defined INTO_CONTAINER (
         docker restart dotnet-%INTO_CONTAINER%-srv_%PROJECT_NAME%
-        docker logs -f dotnet-%INTO_CONTAINER%-srv_%PROJECT_NAME% --since "1m"
+        docker logs -f dotnet-%INTO_CONTAINER%-srv_%PROJECT_NAME% --since "0m"
     ) else (
         echo choose target container with options.
     )
