@@ -1,6 +1,11 @@
 # research-microservice-and-ocelot
 
-This is a microservice infrastructure project run with Ocelot and .NET WebAPI.
+此專案為 .NET Ocelot API Gateway 運用與微服務架構範例。
+
+本專案基於以下前置調研規劃與設計：
+
++ [.NET Core 伺服器專案](https://github.com/eastmoon/infra-dotnet-webapi)
++ [.NET Core WebAPI 驗證與授權範例專案](https://github.com/eastmoon/research-dotnet-auth-webapi-project)
 
 ## 專案架構
 
