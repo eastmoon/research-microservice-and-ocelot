@@ -28,7 +28,9 @@ Ocelot 是對使用 .NET 運作的微服務或服務導向架構，提供一個�
 + 負載平衡：提供單一路由指向多個下行服務
 + 配合 Consul：以此取得實際服務資訊與驗證
 
-### 設定規劃
+Ocelot 本身亦是個服務，對於 HTTP 狀態回應也包括相關的[錯誤訊息](https://ocelot.readthedocs.io/en/latest/features/errorcodes.html)規劃。
+
+### 配置設定
 
 + [Ocelot Configuration](https://ocelot.readthedocs.io/en/latest/features/configuration.html)
 
@@ -95,6 +97,38 @@ Ocelot 的設定檔案載入方式可採用以下方式：
 ### 負載平衡
 
 + [Ocelot Load Balancer](https://ocelot.readthedocs.io/en/latest/features/loadbalancer.html)
+
+Ocelot 對每個路由可以設定複數個下行目標服務在 ```DownstreamHostAndPorts``` 並設定 ```LoadBalancerOptions``` 以啟動對此路由處理的[負載平衡](https://aws.amazon.com/tw/what-is/load-balancing/)。
+
+```
+{
+  "Routes": [
+    {
+      "UpstreamPathTemplate": "/posts/{postId}",
+      "UpstreamHttpMethod": [ "Put", "Delete" ],
+      "DownstreamPathTemplate": "/api/posts/{postId}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        { "Host": "10.0.1.10", "Port": 5000 },
+        { "Host": "10.0.1.11", "Port": 5000 }
+      ],
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
+      }
+    }
+  ]
+}
+```
+> 此範例將路由 ```/posts/{postId}``` 導向 ```/api/posts/{postId}```，其下行服務在 10.0.1.10:5000 和 10.0.1.11:5000，使用負載平衡型態為 LeastConnection
+
+目前實作的負載平衡類型如下：
+
++ LeastConnection：下行服務中現有請求數最少的服務優先
++ RoundRobin：依序循環將請求交由下行服務處理
++ NoLoadBalancer：將請求交由第一個下行服務處理
++ CookieStickySessions：將 Cookie 資訊粘貼於全部請求
+
+若現有的負載平衡機制不符合使用，可[自行設計負載平衡演算法](https://ocelot.readthedocs.io/en/latest/features/loadbalancer.html#custom-load-balancers)。
 
 ## 文獻
 
