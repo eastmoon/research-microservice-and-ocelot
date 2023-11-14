@@ -4,6 +4,8 @@ This is a microservice infrastructure project run with Ocelot and .NET WebAPI.
 
 ## 專案架構
 
+![](./doc/img/ocelot-demo-system.png)
+
 + 一個 Ocelot 專案
 + 一個 .NET Authentication 專案
     - [auth](./app/auth)
@@ -11,59 +13,40 @@ This is a microservice infrastructure project run with Ocelot and .NET WebAPI.
     - [kernel](./app/kernel)
     - [utils](./app/utils)
 
-## .NET 專案建立與發佈
+詳細設定方式參考[專案建置文件](./doc/ocelot-project-design.md)
 
-參考 [.NET Core CLI & Container integrate](https://github.com/eastmoon/infra-dotnet-webapi/blob/master/doc/dotnet-cli.md) 建立專案，後續範例以 Auth 專案為範本，其他項目參考過程修改相關服務名稱 ```AuthServer``` 為對應名稱。
+## Ocelot
 
-+ 建置專案
++ [Ocelot Bigpicture](https://ocelot.readthedocs.io/en/latest/introduction/bigpicture.html)
 
-```
-cd /app/auth
-dotnet new sln
-dotnet new gitignore
-dotnet new webapi --no-restore -o Service
-dotnet sln add $(ls -r **/*.csproj)
-```
+### 設定規劃
 
-+ 依據專案功能調整服務運作方式
++ [Ocelot Configuration](https://ocelot.readthedocs.io/en/latest/features/configuration.html)
 
-+ 發佈專案
+Ocelot 的主要設定是來自於 ```ocelot.json``` 檔案，其設定是在 ```ocelot/Service/Program.cs``` 中的設定載入並在服務設定 ```AddOcelot``` 時添加進去。
 
-```
-cd /app/auth
-rm -rf publish/*
-dotnet publish --configuration Release -o publish
-```
+而設定檔 ```ocelot.json``` 主要有兩段設定：
 
-## Ocelot 專案建立
++ Routes 為路由設定，由於告知 Ocelot 如何處理每個上行 ( upstream ) 需求
++ GlobalConfiguration 是全體設定，用來規劃全部路由的共通設定
 
-Ocelot 專案是一個 .NET Core 專案，並增加 Ocelot 套件
+Ocelot 的設定檔案載入方式可採用以下方式：
 
-```
-cd /app/ocelot
-dotnet new sln
-dotnet new gitignore
-dotnet new webapi --no-restore -o Service
-dotnet sln add $(ls -r **/*.csproj)
-cd /app/ocelot/Service
-dotnet add package ocelot --version 18.0.0
-```
++ 單一個 ```ocelot.json```
+    - 配合單檔可以動態修改設定檔後，觸發[變更設定自動載入](https://ocelot.readthedocs.io/en/latest/features/configuration.html#reload-json-config-on-change)
++ 依據[環境參數載入](https://ocelot.readthedocs.io/en/latest/features/configuration.html#multiple-environments)載入設定檔案
++ 多個檔案整合 ```ocelot.([a-zA-Z0-9]*).json``` 與 ```ocelot.global.json``` ( 參考文獻 [Merging Configuration Files](https://ocelot.readthedocs.io/en/latest/features/configuration.html#merging-configuration-files) )
++ 讀取自 Consul 伺服器 ( 參考文獻 [Store Configuration in Consul](https://ocelot.readthedocs.io/en/latest/features/configuration.html#store-configuration-in-consul) )
 
-Ocelot 版本對應 .NET 版本可參考 [Ocelot Nuget 官方網站](https://www.nuget.org/packages/Ocelot)，其約略對應為：
+### 路由
 
-+ Ocelot 19+ 為 .NET 7
-+ Ocelot 18 為 .NET 6
-+ Ocelot 17 為 .NET 5
-+ Ocelot 14 - 16 為 .NET 3.1
-+ Ocelot 13.8 - 13.9 為 .NET 3.0
++ [Ocelot Routing](https://ocelot.readthedocs.io/en/latest/features/routing.html)
 
-建置專案使用標準的程序
+![](./doc/img/ocelot-route.png)
 
-```
-cd /app/ocelot
-rm -rf publish/*
-dotnet publish --configuration Release -o publish
-```
+### 負載平衡
+
++ [Ocelot Load Balancer](https://ocelot.readthedocs.io/en/latest/features/loadbalancer.html)
 
 ## 文獻
 
