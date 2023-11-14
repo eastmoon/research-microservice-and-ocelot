@@ -19,6 +19,15 @@ This is a microservice infrastructure project run with Ocelot and .NET WebAPI.
 
 + [Ocelot Bigpicture](https://ocelot.readthedocs.io/en/latest/introduction/bigpicture.html)
 
+Ocelot 是對使用 .NET 運作的微服務或服務導向架構，提供一個統一系統入口點；其可配合任何使用 HTTP(S) 協定的服務，並運行於支援 ASP.NET Core 的平台。
+
+若從 .NET 架構來看，Ocelot 本身是個中間件 ( middlewares )，其作用是將 HttpRequest 轉換成 HttpRequestMessage 物件，並透過物件將訊息傳遞給下行服務，再將收到的回應以 HttpResponse 物件回應；在此基本運作上，額外設計如下內容：
+
++ 基礎服務：經由單一服務傳遞 HTTP(S) 協定給下行 ( downstream ) 服務
++ 身分伺服器：驗證經由身分伺服器 ( IdentityServer ) 取得的權杖 ( token )
++ 負載平衡：提供單一路由指向多個下行服務
++ 配合 Consul：以此取得實際服務資訊與驗證
+
 ### 設定規劃
 
 + [Ocelot Configuration](https://ocelot.readthedocs.io/en/latest/features/configuration.html)
@@ -43,6 +52,45 @@ Ocelot 的設定檔案載入方式可採用以下方式：
 + [Ocelot Routing](https://ocelot.readthedocs.io/en/latest/features/routing.html)
 
 ![](./doc/img/ocelot-route.png)
+
+對 Ocelot 來說，從用戶來的 HttpRequest 是上行 ( Upstream ) 內容，要傳遞的目標服務是下行 ( Downstream ) 內容，因此，其任一路由設定規則如下：
+
+```
+{
+  "Routes": [
+    {
+      "UpstreamPathTemplate": "/posts/{postId}",
+      "UpstreamHttpMethod": [ "Put", "Delete" ],
+      "DownstreamPathTemplate": "/api/posts/{postId}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        { "Host": "localhost", "Port": 80 }
+      ]
+    }
+  ]
+}
+```
+> 所有路由規則一律放到 Routes 矩陣中
+
+其各項設定方述如下：
+
++ UpstreamPathTemplate：Ocelot 監測的路由，並[標記變數符號](https://ocelot.readthedocs.io/en/latest/features/routing.html#placeholders)，供給下行組合路由
++ UpstreamHttpMethod：Ocelot 監測的路由使用何種 Http 方式
+    - 透過此設定可以規劃相同路由不同方式，並指向不同的下行服務
++ DownstreamPathTemplate：Ocelot 傳遞目標服務的路由，可使用上行的[標記變數符號](https://ocelot.readthedocs.io/en/latest/features/routing.html#placeholders)來組合路徑
++ DownstreamScheme：Ocelot 傳遞目標服務的協定，在某些情況下上行會試 HTTPS 但下行為 HTTP
++ DownstreamHostAndPorts：Ocelot 傳遞目標服務的網址 ( 域名 ) 與連結埠
+
+其他設定：
+
++ ```"RouteIsCaseSensitive": true```：指定上下行路由匹配會區分大小寫，亦即大小寫必須完全匹配
++ ```"UpstreamHost": "somedomain.com"```：指定改上行路由，其網址的來源必需為 ```somedomain.com```，亦即是經由 DNS 域名轉址過來的訊息，倘若未設定此項則所有來源皆會進入
+    - 此項設定類似 Nginx 的 VirtualHost，以此指定特定域名對應至內部的服務，來達到多個域名指向單一主機，但相同連結埠能進入不同的服務
++ ```"Priority": 0```：指定當前路由設定的優先權，當單一路由可能匹配多個設定時，優先權高的會先被匹配
++ [Query Strings](https://ocelot.readthedocs.io/en/latest/features/routing.html#query-strings)
+    - 在 ```UpstreamPathTemplate``` 中可以自 Query Strings 中設定變數符號，並利用在 ```DownstreamPathTemplate``` 中的 Query Strings
++ [Security Options](https://ocelot.readthedocs.io/en/latest/features/routing.html#security-options)
+    - 設定允許與阻擋的網址，可以設定單一網址或指定網段
 
 ### 負載平衡
 
