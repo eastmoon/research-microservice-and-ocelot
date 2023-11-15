@@ -52,6 +52,8 @@ Ocelot 的設定檔案載入方式可採用以下方式：
     - 配合單檔可以動態修改設定檔後，觸發[變更設定自動載入](https://ocelot.readthedocs.io/en/latest/features/configuration.html#reload-json-config-on-change)
 + 依據[環境參數載入](https://ocelot.readthedocs.io/en/latest/features/configuration.html#multiple-environments)載入設定檔案
 + 多個檔案整合 ```ocelot.([a-zA-Z0-9]*).json``` 與 ```ocelot.global.json``` ( 參考文獻 [Merging Configuration Files](https://ocelot.readthedocs.io/en/latest/features/configuration.html#merging-configuration-files) )
+    - 合併設定是在服務啟用時，依據指定目標目錄中所有符合規則的 JSON，將其內容合併成新的 ocelot.json 並替代在 DLL 所在目錄下；由於這項原則，若沒在正確目錄執行服務，會導致目錄偏移無法匯入產生的檔案
+    - 依據 Ocelot 文件，其合併設定需再 WebHost 的應用服務設定中，此項設定在 .NET 3 與 .NET 6 有明顯差異，相關程式參考 [ocelot-3](./app/ocelot-3/Service/Program.cs) 與 [ocelot-6](./app/ocelot-6/Service/Program.cs)
 + 讀取自 Consul 伺服器 ( 參考文獻 [Store Configuration in Consul](https://ocelot.readthedocs.io/en/latest/features/configuration.html#store-configuration-in-consul) )
 
 ### 路由

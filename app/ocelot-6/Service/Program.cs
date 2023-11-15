@@ -12,6 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Setting ocelot service with hostingContext and config object.
 builder.WebHost.ConfigureAppConfiguration((hostingContext, config) => {
     // Setting host server setting and default ocelot configuration
+    // When this function execute, default appsettings will not working, you must addition by yourself.
     var env = hostingContext.HostingEnvironment;
     config.AddJsonFile("appsettings.json", true, true)
           .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true, true)
