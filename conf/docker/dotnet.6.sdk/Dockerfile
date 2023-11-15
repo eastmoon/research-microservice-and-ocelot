@@ -2,7 +2,7 @@ FROM mcr.microsoft.com/dotnet/sdk:6.0
 
 # Install dotnet tools
 RUN dotnet tool install -g swashbuckle.aspnetcore.cli
-RUN dotnet tool install -g dotnet-ef
+RUN dotnet tool install -g dotnet-ef --version 7.0.13
 
 # Add ENV Path, make sure tool can work
 ENV PATH="${PATH}:/root/.dotnet/tools"
