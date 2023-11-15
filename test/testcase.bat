@@ -21,3 +21,11 @@ echo.
 echo ^> Check Utils server at localhost:5000/utils
 curl http://localhost:5000/utils
 echo.
+
+echo ^> Check Core server at localhost:5050/core
+curl http://localhost:5050/core
+echo.
+
+echo ^> Check Utils server at localhost:5050/utils
+curl http://localhost:5050/utils
+echo.
