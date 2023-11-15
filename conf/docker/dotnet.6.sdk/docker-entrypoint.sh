@@ -16,7 +16,8 @@ if [ "$1" = "dotnet" ] && [ -e ${DOTNET_APP_PATH} ]; then
         fi
         if [ -e /app/publish/Service.dll ];
         then
-            dotnet /app/publish/Service.dll
+            cd /app/publish
+            dotnet Service.dll
         else
             echo "$0: project not publish."
             DEVELOP_MODE=1
