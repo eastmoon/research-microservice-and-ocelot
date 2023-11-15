@@ -364,7 +364,8 @@ goto end
 @rem ------------------- Command "test" method -------------------
 
 :cli-test
-    call %CLI_DIRECTORY%\test\testcase.bat
+    call %CLI_DIRECTORY%\test\testcase-route.bat
+    call %CLI_DIRECTORY%\test\testcase-auth.bat
     goto end
 
 :cli-test-args
