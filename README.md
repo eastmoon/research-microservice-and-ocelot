@@ -135,6 +135,16 @@ Ocelot 對每個路由可以設定複數個下行目標服務在 ```DownstreamHo
 
 若現有的負載平衡機制不符合使用，可[自行設計負載平衡演算法](https://ocelot.readthedocs.io/en/latest/features/loadbalancer.html#custom-load-balancers)。
 
+## 授權與驗證
+
++ [Ocelot Administration](https://ocelot.readthedocs.io/en/latest/features/administration.html)
++ [Ocelot Authentication](https://ocelot.readthedocs.io/en/latest/features/authentication.html)
++ [Ocelot Authorization](https://ocelot.readthedocs.io/en/latest/features/authorization.html)
+
+## 服務探索 ( Service Discovery )
+
++ [Ocelot Service Discovery](https://ocelot.readthedocs.io/en/latest/features/servicediscovery.html)
+
 ## 文獻
 
 + [Ocelot - Github](https://github.com/ThreeMammals/Ocelot)
