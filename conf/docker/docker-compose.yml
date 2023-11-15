@@ -3,14 +3,24 @@
 
 version: "3"
 services:
-  ocelot:
+  ocelot6:
     image: ${IMAGE_DOTNET_V6}
-    container_name: dotnet-ocelot-srv_${PROJECT_NAME}
+    container_name: dotnet-ocelot6-srv_${PROJECT_NAME}
     ports:
       - "5000:5000"
     volumes:
       - ${DOTNET_OCELOT_APP_PATH}:/app
       - ${DOTNET_OCELOT_PUBLISH_PATH}:/app/publish
+    networks:
+      - service_network
+  ocelot3:
+    image: ${IMAGE_DOTNET_V3}
+    container_name: dotnet-ocelot3-srv_${PROJECT_NAME}
+    ports:
+      - "5050:5000"
+    volumes:
+      - ${DOTNET_OCELOT3_APP_PATH}:/app
+      - ${DOTNET_OCELOT3_PUBLISH_PATH}:/app/publish
     networks:
       - service_network
   auth:

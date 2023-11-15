@@ -195,12 +195,20 @@ goto end
     echo IMAGE_DOTNET_V3=net.dotnet.3.sdk:%PROJECT_NAME% >> %CONF_FILE_PATH%
 
     @rem Setting ocelot project and cache directory
-    set TARGET_DIR=%CLI_DIRECTORY%\cache\publish\ocelot
+    set TARGET_DIR=%CLI_DIRECTORY%\cache\publish\ocelot-6
     IF NOT EXIST %TARGET_DIR% (
         mkdir %TARGET_DIR%
     )
     echo DOTNET_OCELOT_PUBLISH_PATH=%TARGET_DIR% >> %CONF_FILE_PATH%
-    echo DOTNET_OCELOT_APP_PATH=%CLI_DIRECTORY%\app\ocelot >> %CONF_FILE_PATH%
+    echo DOTNET_OCELOT_APP_PATH=%CLI_DIRECTORY%\app\ocelot-6 >> %CONF_FILE_PATH%
+
+    @rem Setting ocelot project and cache directory
+    set TARGET_DIR=%CLI_DIRECTORY%\cache\publish\ocelot-3
+    IF NOT EXIST %TARGET_DIR% (
+        mkdir %TARGET_DIR%
+    )
+    echo DOTNET_OCELOT3_PUBLISH_PATH=%TARGET_DIR% >> %CONF_FILE_PATH%
+    echo DOTNET_OCELOT3_APP_PATH=%CLI_DIRECTORY%\app\ocelot-3 >> %CONF_FILE_PATH%
 
     @rem Setting auth project and cache directory
     set TARGET_DIR=%CLI_DIRECTORY%\cache\publish\auth
@@ -264,7 +272,8 @@ goto end
 :cli-into-args
     set COMMON_ARGS_KEY=%1
     set COMMON_ARGS_VALUE=%2
-    if "%COMMON_ARGS_KEY%"=="--ocelot" (set INTO_CONTAINER=ocelot)
+    if "%COMMON_ARGS_KEY%"=="--ocelot3" (set INTO_CONTAINER=ocelot3)
+    if "%COMMON_ARGS_KEY%"=="--ocelot6" (set INTO_CONTAINER=ocelot6)
     if "%COMMON_ARGS_KEY%"=="--auth" (set INTO_CONTAINER=auth)
     if "%COMMON_ARGS_KEY%"=="--core" (set INTO_CONTAINER=core)
     if "%COMMON_ARGS_KEY%"=="--utils" (set INTO_CONTAINER=utils)
@@ -276,7 +285,8 @@ goto end
     echo.
     echo Options:
     echo      --help, -h        Show more information with CLI.
-    echo      --ocelot          Into ocelot container.
+    echo      --ocelot3         Into ocelot with .net 3 container.
+    echo      --ocelot6         Into ocelot with .net 6 container.
     echo      --auth            Into auth container.
     echo      --core            Into jenkin core container.
     echo      --utils           Into utils container.
@@ -296,7 +306,8 @@ goto end
 :cli-logs-args
     set COMMON_ARGS_KEY=%1
     set COMMON_ARGS_VALUE=%2
-    if "%COMMON_ARGS_KEY%"=="--ocelot" (set INTO_CONTAINER=ocelot)
+    if "%COMMON_ARGS_KEY%"=="--ocelot3" (set INTO_CONTAINER=ocelot3)
+    if "%COMMON_ARGS_KEY%"=="--ocelot6" (set INTO_CONTAINER=ocelot6)
     if "%COMMON_ARGS_KEY%"=="--auth" (set INTO_CONTAINER=auth)
     if "%COMMON_ARGS_KEY%"=="--core" (set INTO_CONTAINER=core)
     if "%COMMON_ARGS_KEY%"=="--utils" (set INTO_CONTAINER=utils)
@@ -308,7 +319,8 @@ goto end
     echo.
     echo Options:
     echo      --help, -h        Show more information with CLI.
-    echo      --ocelot          Into ocelot container.
+    echo      --ocelot3         Into ocelot with .net 3 container.
+    echo      --ocelot6         Into ocelot with .net 6 container.
     echo      --auth            Into auth container.
     echo      --core            Into jenkin core container.
     echo      --utils           Into utils container.
@@ -329,7 +341,8 @@ goto end
 :cli-reload-args
     set COMMON_ARGS_KEY=%1
     set COMMON_ARGS_VALUE=%2
-    if "%COMMON_ARGS_KEY%"=="--ocelot" (set INTO_CONTAINER=ocelot)
+    if "%COMMON_ARGS_KEY%"=="--ocelot3" (set INTO_CONTAINER=ocelot3)
+    if "%COMMON_ARGS_KEY%"=="--ocelot6" (set INTO_CONTAINER=ocelot6)
     if "%COMMON_ARGS_KEY%"=="--auth" (set INTO_CONTAINER=auth)
     if "%COMMON_ARGS_KEY%"=="--core" (set INTO_CONTAINER=core)
     if "%COMMON_ARGS_KEY%"=="--utils" (set INTO_CONTAINER=utils)
@@ -341,7 +354,8 @@ goto end
     echo.
     echo Options:
     echo      --help, -h        Show more information with CLI.
-    echo      --ocelot          Into ocelot container.
+    echo      --ocelot3         Into ocelot with .net 3 container.
+    echo      --ocelot6         Into ocelot with .net 6 container.
     echo      --auth            Into auth container.
     echo      --core            Into jenkin core container.
     echo      --utils           Into utils container.
