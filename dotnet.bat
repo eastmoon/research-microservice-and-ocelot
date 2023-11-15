@@ -131,6 +131,7 @@ goto end
     echo      into              Going to container.
     echo      logs              Show container log.
     echo      reload            Restart container.
+    echo      test              Run testcase.
     echo      pack              Package docker image with algorithm.
     echo.
     echo Run 'cli [COMMAND] --help' for more information on a command.
@@ -344,6 +345,23 @@ goto end
     echo      --auth            Into auth container.
     echo      --core            Into jenkin core container.
     echo      --utils           Into utils container.
+    goto end
+
+@rem ------------------- Command "test" method -------------------
+
+:cli-test
+    call %CLI_DIRECTORY%\test\testcase.bat
+    goto end
+
+:cli-test-args
+    goto end
+
+:cli-test-help
+    echo This is a Command Line Interface with project %PROJECT_NAME%
+    echo Package docker image with algorithm.
+    echo.
+    echo Options:
+    echo      --help, -h        Show more information with UP Command.
     goto end
 
 @rem ------------------- Command "pack" method -------------------

@@ -18,7 +18,7 @@
     - [kernel](./app/kernel)
     - [utils](./app/utils)
 
-詳細設定方式參考[專案建置文件](./doc/ocelot-project-design.md)
+詳細設定方式參考[專案建置與操作](./doc/ocelot-project-design.md)文件。
 
 ## Ocelot
 

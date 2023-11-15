@@ -19,6 +19,7 @@ dotnet <command>
     - 顯使 ocelot 容器記錄可使用 ```dotnet logs --ocelot```
 + reload：重新啟動容器，由於容器設計為重啟會在編譯專案，若要編譯服務則可使用此方式並啟用服務已進行測試
     - 重啟 ocelot 容器可使用 ```dotnet reload --ocelot```
++ test：執行測試腳本以驗證服務是否正常運作
 
 ## .NET 專案建立與發佈
 
