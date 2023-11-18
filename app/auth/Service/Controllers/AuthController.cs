@@ -38,10 +38,22 @@ namespace Service.Controllers
         [HttpPost("[action]")]
         public string Check()
         {
-            Console.WriteLine("> Check call " + Request.Headers["Authorization"]);
-            User.Claims.ToList().ForEach(p => Console.WriteLine($"> {p.Type} - {p.Value}"));
-            Console.WriteLine("> Claims.jti = " + User.Claims.FirstOrDefault(p => p.Type == "jti").Value);
+            try {
+              Console.WriteLine("> Check call " + Request.Headers["Authorization"]);
+              User.Claims.ToList().ForEach(p => Console.WriteLine($"> {p.Type} - {p.Value}"));
+              Console.WriteLine("> Claims.jti = " + User.Claims.FirstOrDefault(p => p.Type == "jti").Value);
+            } catch (Exception e) {
+                Console.WriteLine($"Processing failed: {e.Message}");
+                return e.Message;
+            }
             return User.Identity.Name;
+        }
+
+        [Authorize(Roles = "Root")]
+        [HttpGet("[action]")]
+        public string RootRole()
+        {
+            return "Auth check : Token has root roles";
         }
     }
 }
