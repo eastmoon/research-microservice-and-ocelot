@@ -139,9 +139,31 @@ Ocelot 對每個路由可以設定複數個下行目標服務在 ```DownstreamHo
 
 ## 授權與驗證
 
-+ [Ocelot Administration](https://ocelot.readthedocs.io/en/latest/features/administration.html)
 + [Ocelot Authentication](https://ocelot.readthedocs.io/en/latest/features/authentication.html)
 + [Ocelot Authorization](https://ocelot.readthedocs.io/en/latest/features/authorization.html)
+
+##### Ocelot Role 解析爭議
+
+實務上 Ocelot 處理與 .NETCore 處理可以並行，可以各做各的檢查也能同時檢查相同參數
+
+但在 Ocelot 和 JwtBearer 解析 Role 並無處裡關聯，相反 Ocelot 是不參考 Authorize 裝飾屬性的解析流程，因此，若要正確比對 Role 則需要使用 [SAML](https://learn.microsoft.com/en-us/entra/identity-platform/reference-claims-mapping-policy-type#saml-restricted-claim-set) 正式名稱來做為 Key。
+
++ [Ocelot doesn't handle correctly RouteClaimsRequirement with a key as an Url](https://github.com/ThreeMammals/Ocelot/issues/679)
++ [Ocelot RouteClaimsRequirement does not recognize my claims and returns 403 Forbidden](https://stackoverflow.com/questions/63049670)
+
+在 .NETCore 的 Authorize 處理中，受到裝飾屬性撰寫規範，僅能用如 Roles、Policy，因此，若再 Cliams 中設定的 key 並非 SAML 規範，則會需要使用 Policy 委任的函數處理，但在 Ocelot 則會被當成一般的 key-value 來解析並用於匹配
+
+雖然，採用此設計的原因並無文獻說明，但在使用上可以將 Ocelot 和 .NET Authorize 的處理用不同的 Cliams 加以區分。
+
+##### 是否可以透過 override 方式處理權限等級問題
+
+無法，根據 Ocelot 原始碼，其在比對的類別 [ClaimsAuthorizer](https://github.com/ThreeMammals/Ocelot/blob/develop/src/Ocelot/Authorization/ClaimsAuthorizer.cs) 是採用正則表示式的比對檢查，若要改為以數值比對的方式，需要從根本調整改程式已增加檢查條件。
+
+在 .NETCore 雖可以透過 Policy 的觸發委託的處理函數，但 Ocelot 並未如此設計；因此，對應此類設計方式，是在根源上將等級的數值全部提供給 JWT，但此方式會導致 JWT 資料量增加，在規劃權限資料時需多加考量。
+
+## 管理者服務
+
++ [Ocelot Administration](https://ocelot.readthedocs.io/en/latest/features/administration.html)
 
 ## 服務探索 ( Service Discovery )
 
@@ -154,3 +176,6 @@ Ocelot 對每個路由可以設定複數個下行目標服務在 ```DownstreamHo
     - [使用 Ocelot 實作 API 閘道](https://learn.microsoft.com/zh-tw/dotnet/architecture/microservices/multi-container-microservice-net-applications/implement-api-gateways-with-ocelot)
 + 教學文章與範例專案
     - [Ocelot-Gateway-Sample - Github](https://github.com/PasinduUmayanga/Ocelot-Gateway-Sample)
+    - [Implementing an API Gateway in ASP.NET Core with Ocelot](https://auth0.com/blog/implementing-api-gateway-in-aspnet-core-with-ocelot/)
+    - [Secure Microservices Using JWT With Ocelot in .NET Core](https://code-maze.com/dotnetcore-secure-microservices-jwt-ocelot/)
+    - [Ocelot custom authentication and authorization](https://www.programmersought.com/article/63126086247/)
