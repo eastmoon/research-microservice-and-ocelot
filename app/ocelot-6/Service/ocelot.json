@@ -1,24 +1,5 @@
 {
-    "Routes": [
-      {
-        "UpstreamPathTemplate": "/core",
-        "UpstreamHttpMethod": [ "Get" ],
-        "DownstreamPathTemplate": "/WeatherForecast",
-        "DownstreamScheme": "http",
-        "DownstreamHostAndPorts": [
-          { "Host": "core", "Port": 5000 }
-        ]
-      },
-      {
-        "UpstreamPathTemplate": "/utils",
-        "UpstreamHttpMethod": [ "Get" ],
-        "DownstreamPathTemplate": "/WeatherForecast",
-        "DownstreamScheme": "http",
-        "DownstreamHostAndPorts": [
-          { "Host": "utils", "Port": 5000 }
-        ]
-      }
-    ],
+    "Routes": [],
     "GlobalConfiguration": {
         "BaseUrl": "http://localhost:5000"
     }
