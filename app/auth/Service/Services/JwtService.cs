@@ -50,8 +50,11 @@ namespace Service.Services
             //claims.Add(new Claim(JwtRegisteredClaimNames.NameId, userName));
 
             // 自定義 JWT 內容，套用 "roles" 加入登入者該有的角色
-            claims.Add(new Claim("roles", "Admin"));
-            claims.Add(new Claim("roles", "Users"));
+            claims.Add(new Claim("roles", "Root"));
+
+            // 自定義 JWT 內容，套用在 "UserType" 自定義的原則授權處理
+            claims.Add(new Claim("UserType", "Admin"));
+            claims.Add(new Claim("UserType", "User"));
 
             // 自定義 JWT 內容，套用在 "accesslevel" 自定義的原則授權處理
             claims.Add(new Claim("accesslevel", "1"));
