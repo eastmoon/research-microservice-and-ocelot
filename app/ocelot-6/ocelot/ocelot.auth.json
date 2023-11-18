@@ -1,0 +1,160 @@
+{
+    "Routes": [
+      {
+        "UpstreamPathTemplate": "/{everything}",
+        "UpstreamHttpMethod": [ "Get", "POST", "PUT", "DELETE" ],
+        "DownstreamPathTemplate": "/{everything}",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          { "Host": "auth", "Port": 5000 }
+        ]
+      },
+      {
+        "UpstreamPathTemplate": "/check/RootRole",
+        "UpstreamHttpMethod": [ "Get" ],
+        "DownstreamPathTemplate": "/check/AdminRole",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          { "Host": "auth", "Port": 5000 }
+        ],
+        "RouteClaimsRequirement": {
+          "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "Root"
+        },
+        "AuthenticationOptions": {
+          "AuthenticationProviderKey": "Bearer",
+          "AllowedScopes": []
+        }
+      },
+      {
+        "UpstreamPathTemplate": "/check/AdminRole",
+        "UpstreamHttpMethod": [ "Get" ],
+        "DownstreamPathTemplate": "/check/AdminRole",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          { "Host": "auth", "Port": 5000 }
+        ],
+        "RouteClaimsRequirement": {
+          "UserType": "Admin"
+        },
+        "AuthenticationOptions": {
+          "AuthenticationProviderKey": "Bearer",
+          "AllowedScopes": []
+        }
+      },
+      {
+        "UpstreamPathTemplate": "/check/DeveloperRole",
+        "UpstreamHttpMethod": [ "Get" ],
+        "DownstreamPathTemplate": "/check/DeveloperRole",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          { "Host": "auth", "Port": 5000 }
+        ],
+        "RouteClaimsRequirement": {
+          "UserType": "Developer"
+        },
+        "AuthenticationOptions": {
+          "AuthenticationProviderKey": "Bearer",
+          "AllowedScopes": []
+        }
+      },
+      {
+        "UpstreamPathTemplate": "/check/UserRole",
+        "UpstreamHttpMethod": [ "Get" ],
+        "DownstreamPathTemplate": "/check/UserRole",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          { "Host": "auth", "Port": 5000 }
+        ],
+        "RouteClaimsRequirement": {
+          "UserType": "User"
+        },
+        "AuthenticationOptions": {
+          "AuthenticationProviderKey": "Bearer",
+          "AllowedScopes": []
+        }
+      },
+      {
+        "UpstreamPathTemplate": "/check/Level1",
+        "UpstreamHttpMethod": [ "Get" ],
+        "DownstreamPathTemplate": "/check/Level1",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          { "Host": "auth", "Port": 5000 }
+        ],
+        "RouteClaimsRequirement": {
+          "accesslevel": "1"
+        },
+        "AuthenticationOptions": {
+          "AuthenticationProviderKey": "Bearer",
+          "AllowedScopes": []
+        }
+      },
+      {
+        "UpstreamPathTemplate": "/check/Level2",
+        "UpstreamHttpMethod": [ "Get" ],
+        "DownstreamPathTemplate": "/check/Level2",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          { "Host": "auth", "Port": 5000 }
+        ],
+        "RouteClaimsRequirement": {
+          "accesslevel": "2"
+        },
+        "AuthenticationOptions": {
+          "AuthenticationProviderKey": "Bearer",
+          "AllowedScopes": []
+        }
+      },
+      {
+        "UpstreamPathTemplate": "/check/MultiRule1",
+        "UpstreamHttpMethod": [ "Get" ],
+        "DownstreamPathTemplate": "/check/MultiRule1",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          { "Host": "auth", "Port": 5000 }
+        ],
+        "RouteClaimsRequirement": {
+          "UserType": "Admin",
+          "accesslevel": "1"
+        },
+        "AuthenticationOptions": {
+          "AuthenticationProviderKey": "Bearer",
+          "AllowedScopes": []
+        }
+      },
+      {
+        "UpstreamPathTemplate": "/check/MultiRule2",
+        "UpstreamHttpMethod": [ "Get" ],
+        "DownstreamPathTemplate": "/check/MultiRule2",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          { "Host": "auth", "Port": 5000 }
+        ],
+        "RouteClaimsRequirement": {
+          "UserType": "Admin",
+          "accesslevel": "2"
+        },
+        "AuthenticationOptions": {
+          "AuthenticationProviderKey": "Bearer",
+          "AllowedScopes": []
+        }
+      },
+      {
+        "UpstreamPathTemplate": "/check/MultiRule3",
+        "UpstreamHttpMethod": [ "Get" ],
+        "DownstreamPathTemplate": "/check/MultiRule3",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          { "Host": "auth", "Port": 5000 }
+        ],
+        "RouteClaimsRequirement": {
+          "UserType": "Developer",
+          "accesslevel": "1"
+        },
+        "AuthenticationOptions": {
+          "AuthenticationProviderKey": "Bearer",
+          "AllowedScopes": []
+        }
+      }
+    ]
+}
