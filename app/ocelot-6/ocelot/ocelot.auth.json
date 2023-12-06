@@ -18,7 +18,7 @@
           { "Host": "auth", "Port": 5000 }
         ],
         "RouteClaimsRequirement": {
-          "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "Root"
+          "roles": "Root"
         },
         "AuthenticationOptions": {
           "AuthenticationProviderKey": "Bearer",

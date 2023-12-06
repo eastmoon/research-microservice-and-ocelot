@@ -146,7 +146,7 @@ Ocelot 對每個路由可以設定複數個下行目標服務在 ```DownstreamHo
 
 實務上 Ocelot 處理與 .NETCore 處理可以並行，可以各做各的檢查也能同時檢查相同參數
 
-但在 Ocelot 和 JwtBearer 解析 Role 並無處裡關聯，相反 Ocelot 是不參考 Authorize 裝飾屬性的解析流程，因此，若要正確比對 Role 則需要使用 [SAML](https://learn.microsoft.com/en-us/entra/identity-platform/reference-claims-mapping-policy-type#saml-restricted-claim-set) 正式名稱來做為 Key。
+但在 Ocelot 和 JwtBearer 解析 Role 並無處裡關聯，相反 Ocelot 是不參考 Authorize 裝飾屬性的解析流程，因此，若要正確比對 Role ，有些議題討論建議使用 [SAML](https://learn.microsoft.com/en-us/entra/identity-platform/reference-claims-mapping-policy-type#saml-restricted-claim-set) 正式名稱來做為 Key，但由於 JSON 檔案載入額外產生的問題，在文獻中則建議修正字串或關閉 JWT 在解析聲明時自動映射到 SAML 的格式。
 
 + [Ocelot doesn't handle correctly RouteClaimsRequirement with a key as an Url](https://github.com/ThreeMammals/Ocelot/issues/679)
 + [Ocelot RouteClaimsRequirement does not recognize my claims and returns 403 Forbidden](https://stackoverflow.com/questions/63049670)

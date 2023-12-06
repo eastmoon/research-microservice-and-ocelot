@@ -49,6 +49,11 @@ builder.Services
         // 當驗證失敗時，回應標頭會包含 WWW-Authenticate 標頭，這裡會顯示失敗的詳細錯誤原因
         options.IncludeErrorDetails = true;
 
+        // 當驗證 JwtToken 時，不進行 JSON claim 轉換，例如將 roles 轉換為 SAML 標準聲明
+        // 由於 Ocelot 為字串比對檢查，當出現 roles 被轉換為 SAML 聲明的 "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"，這會觸發 JSON 解析問題導致被 Ocelot 判斷為沒有比對內容，
+        // 若為保持與 .NET 的 Roles 處理相同授權字詞，則需關閉此轉換，設定 "roles" 於授權宣告中
+        options.MapInboundClaims = false;
+
         // 設定驗證程序須執行的動作項目
         options.TokenValidationParameters = new TokenValidationParameters
         {
